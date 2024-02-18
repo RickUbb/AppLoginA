@@ -1,0 +1,79 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>IniciarSesion</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Style.css" /> <!-- Enlace al archivo CSS externo -->
+    <style>
+        body {
+            background-image: url('/img/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.7); /* Fondo transparente */
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body style="background-image: url('/img/background.jpg'); background-size: cover; background-repeat: no-repeat;">
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5" style="color: hsl(218, 81%, 15%);">
+        <div class="row gx-lg-5 align-items-center mb-5">
+            <div class="col-lg-5 offset-lg-1 mb-5 mb-lg-0 position-relative">
+                <div class="card bg-glass">
+                    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5" style="color: hsl(218, 81%, 15%);">
+                        <form asp-controller="Login" asp-action="IniciarSesion" method="post">
+
+                            <div class="form-outline mb-4">
+                                <input type="email" required id="correo" name="correo" class="form-control" style="background-color: hsla(0, 0%, 100%, 0.9) !important; backdrop-filter: saturate(200%) blur(25px); color: hsl(218, 81%, 15%);" />
+                                <label class="form-label" for="correo" style="color: hsl(218, 81%, 50%);">Correo</label>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <input type="password" required id="clave" name="clave" class="form-control" style="background-color: hsla(0, 0%, 100%, 0.9) !important; backdrop-filter: saturate(200%) blur(25px); color: hsl(218, 81%, 15%);" />
+                                <label class="form-label" for="clave" style="color: hsl(218, 81%, 50%);">Contraseña</label>
+                            </div>
+                            <div class="d-grid gap-2 mb-3">
+                                <button class="btn btn-primary" type="submit">Iniciar Sesión</button>
+                            </div>
+                            @if (ViewData["Mensaje"] != null)
+                            {
+                                
+                                <div class="form-group">
+                                    <div class="alert alert-danger" role="alert">
+                                        @ViewData["Mensaje"]
+                                    </div>
+                                </div>
+                            }
+                            <div class="text-center mt-3">
+                                <!-- Ajusta el valor mt-3 para controlar el margen superior -->
+                                <p>¿Crea una cuenta? <a href="@Url.Action("Registrarse","Login")" class="btn btn-secondary btn-sm">Registrarte</a></p>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
