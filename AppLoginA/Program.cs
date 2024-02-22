@@ -1,21 +1,22 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using AppLoginA.DBContext;
 using AppLoginA.Servicios.Contrato;
 using AppLoginA.Servicios.Implementacion;
-
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-
+using System;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración de la cadena de conexión.
 builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
 builder.Configuration.AddJsonFile("Config/appsettings.json", optional: false, reloadOnChange: true);
 
-// Conexión base de datos.
 builder.Services.AddDbContext<BaseEFContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 
@@ -28,11 +29,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     });
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-//Para que no puedas regresar al poner Cerrar Sesion
-builder.Services.AddControllersWithViews(options => {
+builder.Services.AddControllersWithViews(options =>
+{
     options.Filters.Add(
             new ResponseCacheAttribute
             {
@@ -42,15 +40,25 @@ builder.Services.AddControllersWithViews(options => {
         );
 });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -58,7 +66,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
