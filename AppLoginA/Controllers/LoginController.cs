@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies; // Importa el espacio de nombres para la autenticación basada en cookies.
 using Microsoft.AspNetCore.Authentication; // Importa el espacio de nombres para la autenticación.
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc; // Importa el espacio de nombres para los controladores MVC.
 using System.Security.Claims; // Importa el espacio de nombres para las reclamaciones de identidad.
 using AppLoginA.Servicios.Contrato; // Importa el espacio de nombres para los contratos de servicios.
@@ -10,7 +11,7 @@ namespace AppLoginA.Controllers // Define el espacio de nombres y comienza la de
 {
     public class LoginController : Controller // Define la clase LoginController como un controlador MVC.
     {
-
+       
         private readonly IUsuarioService _usuarioServicio; // Define una instancia de la interfaz IUsuarioService para acceder al servicio de usuarios.
 
         public LoginController(IUsuarioService usuarioServicio) // Constructor de la clase LoginController que recibe una instancia de IUsuarioService.
