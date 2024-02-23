@@ -11,10 +11,12 @@ namespace AppLoginA.Controllers
     public class ApiController : ControllerBase
     {
         private readonly IUsuarioService _usuarioServicio;
+        private readonly ITokenService _tokenService; // Agrega la inyección de dependencia para ITokenService
 
-        public ApiController(IUsuarioService usuarioServicio)
+        public ApiController(IUsuarioService usuarioServicio, ITokenService tokenService)
         {
             _usuarioServicio = usuarioServicio;
+            _tokenService = tokenService; // Inyecta ITokenService en el constructor
         }
 
         [HttpPost]
@@ -30,8 +32,8 @@ namespace AppLoginA.Controllers
             if (usuarioValido != null)
             {
                 // Si las credenciales son válidas, retornar un mensaje de éxito
-                // Crear Token
-                return Ok("User Login Successful");
+                var token = _tokenService.GenerateToken(usuarioValido); // Utiliza ITokenService para generar el token
+                return Ok(token);
             }
             else
             {
