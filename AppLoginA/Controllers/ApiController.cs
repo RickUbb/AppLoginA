@@ -24,10 +24,10 @@ namespace AppLoginA.Controllers
         public async Task<IActionResult> Login(Usuario userLogin)
         {
             // Encripta la contraseña proporcionada por el usuario
-            string claveEncriptada = Utilidades.EncriptarClave(userLogin.Password);
+            //string claveEncriptada = Utilidades.EncriptarClave(userLogin.Password);
 
             // Ahora puedes validar las credenciales en la base de datos
-            var usuarioValido = await _usuarioServicio.GetUsuario(userLogin.Correo, claveEncriptada);
+            var usuarioValido = await _usuarioServicio.GetUsuario(userLogin.Correo, userLogin.Password );
 
             if (usuarioValido != null)
             {

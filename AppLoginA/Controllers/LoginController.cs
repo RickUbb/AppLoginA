@@ -72,15 +72,15 @@ namespace AppLoginA.Controllers
 
             if (usuario_encontrado == null)
             {
-                ViewData["Mensaje"] = "No se encontraron coincidencias";
+                ViewBag.Mensaje = "No se encontraron coincidencias";
                 return View();
             }
 
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, usuario_encontrado.Correo)
-                // Puedes agregar más reclamaciones según necesites
-            };
+    {
+        new Claim(ClaimTypes.Name, usuario_encontrado.Correo)
+        // Puedes agregar más reclamaciones según necesites
+    };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -95,7 +95,16 @@ namespace AppLoginA.Controllers
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
 
+            // Generar el token JWT
+            string token = _tokenService.GenerateToken(usuario_encontrado);
+
+            // Asignar el token a TempData
+            TempData["Token"] = token;
+
+            // Redireccionar al usuario a la página de inicio o a otra página de tu aplicación
             return RedirectToAction("Index", "Home");
+
         }
+
     }
 }
