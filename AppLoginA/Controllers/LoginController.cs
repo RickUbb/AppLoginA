@@ -77,19 +77,22 @@ namespace AppLoginA.Controllers
             }
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, usuario_encontrado.Correo)
-        // Puedes agregar más reclamaciones según necesites
-    };
+            {
+                new Claim(ClaimTypes.Name, usuario_encontrado.Correo)
+                // Puedes agregar más reclamaciones según necesites
+            };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var authProperties = new AuthenticationProperties
             {
-                AllowRefresh = true
+                AllowRefresh = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1) // Por ejemplo, ajusta el tiempo de vida del token según tus requisitos
                 // Puedes configurar otras propiedades de autenticación según necesites
             };
 
+
+            // Crear la cookie de autenticación
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
@@ -101,9 +104,29 @@ namespace AppLoginA.Controllers
             // Asignar el token a TempData
             TempData["Token"] = token;
 
+            // Almacenar el token en una cookie de autenticación
+            Response.Cookies.Append("Token", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = DateTimeOffset.UtcNow.AddMinutes(1) // El mismo tiempo de vida que la propiedad ExpiresUtc
+            });
+
             // Redireccionar al usuario a la página de inicio o a otra página de tu aplicación
             return RedirectToAction("Index", "Home");
 
+        }
+
+        public async Task<IActionResult> CerrarSesion()
+        {
+            // Cerrar la sesión del usuario
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Limpiar la cookie de token
+            Response.Cookies.Delete("Token");
+
+            // Redireccionar al usuario a la página de inicio de sesión
+            return RedirectToAction("IniciarSesion");
         }
 
     }
