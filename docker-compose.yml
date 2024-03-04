@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: rickuub/sqlserverlogin:with_db
+    container_name: sql_server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Adminadmin1
+    ports:
+      - "1433:1433"
+    volumes:
+      - db_data:/var/opt/mssql/data   # Monta un volumen para los datos de la base de datos
+
+  app:
+    build: .
+    container_name: app_login
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+volumes:
+  db_data:   # Define el volumen para los datos de la base de datos
