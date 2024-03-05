@@ -14,7 +14,7 @@ services:
 
   apploginb:
     build:
-      context: C:\Users\ricar\source\repos\RickUbb\AppLoginA-AppWebB\AppLoginA-AppWebB # Ruta relativa al segundo proyecto
+      context: ../AppLoginA-AppWebB  # La ruta relativa para ir una carpeta atrás y acceder a AppLoginA-AppWebB
       dockerfile: Dockerfile
     ports:
       - "7032:80"
