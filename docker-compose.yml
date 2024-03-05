@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: rickuub/sqlserverlogin:with_db
+    image: rickuub/sqlserverlogin:updated_db
     container_name: sql_server
     environment:
       - ACCEPT_EULA=Y
@@ -12,11 +12,22 @@ services:
     volumes:
       - db_data:/var/opt/mssql/data   # Monta un volumen para los datos de la base de datos
 
-  app:
+  apploginb:
+    build:
+      context: C:\Users\ricar\source\repos\RickUbb\AppLoginA-AppWebB\AppLoginA-AppWebB # Ruta relativa al segundo proyecto
+      dockerfile: Dockerfile
+    ports:
+      - "7032:80"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  applogina:
     build: .
     container_name: app_login
     ports:
-      - "8080:80"
+      - "7033:80"
     depends_on:
       - db
     environment:
