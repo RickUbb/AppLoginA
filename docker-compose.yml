@@ -1,0 +1,14 @@
+﻿version: "3.9"
+services:
+  app2cliente:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7032:80"
+    networks:
+      - red_urss
+
+networks:
+  red_urss:
+    driver: bridge

@@ -1,0 +1,102 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    
+}
+@model List<RegistroLogin>
+
+<h1>Hello, welcome to our logs analitys</h1>
+
+<div class="container">
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            <!-- Contador de correos y tokens -->
+           
+                var correoCounts = Model.GroupBy(x => x.Correo).Select(x => new { Correo = x.Key, Count = x.Count() }).ToList();
+                var tokenCounts = Model.GroupBy(x => x.Correo).Select(x => new
+                {
+                    Correo = x.Key,
+                    TokenTrue = x.Count(y => y.IsRegisteredToken ?? false),
+                    TokenFalse = x.Count(y => !(y.IsRegisteredToken ?? false))
+                }).ToList();
+
+            <!-- Mostrar estadísticas -->
+            <h2>Email Frequency</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in correoCounts)
+                    {
+                        <tr>
+                            <td>@item.Correo</td>
+                            <td>@item.Count</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <h2>Token Distribution</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>with Tokens</th>
+                        <th>without Tokens</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in tokenCounts)
+                    {
+                        <tr>
+                            <td>@item.Correo</td>
+                            <td>@item.TokenTrue</td>
+                            <td>@item.TokenFalse</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No logs</p>
+        }
+    </div>
+</div>
+
+<h2>Logs</h2>
+<div class="contairner">
+    <div class="row">
+        @if (Model != null)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>User's Emails</td>
+                        <td>Log Token</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Correo</td>
+                            <td>@item.IsRegisteredToken</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No logs</p>
+        }
+    </div>
+</div>
+

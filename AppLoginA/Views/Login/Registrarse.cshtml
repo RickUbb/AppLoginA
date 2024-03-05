@@ -1,0 +1,103 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/Style.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* Centra los elementos horizontalmente */
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/img/bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            z-index: -1; /* Coloca la imagen detrás del contenido */
+        }
+
+        .card {
+            background-color: transparent; /* Hace que el formulario sea transparente */
+            border: none; /* Elimina el borde del formulario */
+            padding: 30px; /* Añade espacio alrededor del formulario */
+            max-width: 400px; /* Establece un ancho máximo para el formulario */
+            text-align: center; /* Centra el contenido del formulario */
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.3) !important; /* Establece un color de fondo semitransparente para los campos de formulario */
+            backdrop-filter: saturate(200%) blur(25px); /* Agrega un efecto de desenfoque al fondo */
+            color: hsl(218, 81%, 15%);
+            border: none; /* Elimina el borde de los campos de formulario */
+            margin-bottom: 20px; /* Añade espacio entre los campos de formulario */
+            border-radius: 20px; /* Agrega bordes redondeados completos a los campos de formulario */
+            width: calc(100% - 40px); /* Establece el ancho igual al 100% menos el espacio de relleno */
+            margin-left: auto; /* Centra horizontalmente los campos de formulario */
+            margin-right: auto; /* Centra horizontalmente los campos de formulario */
+        }
+
+        .btn-primary {
+            background-color: #fbceb5; /* Establece el color de fondo del botón */
+            color: black; /* Establece el color del texto del botón */
+            border: none; /* Elimina el borde del botón */
+            border-radius: 20px; /* Agrega bordes redondeados completos al botón */
+            width: calc(100% - 40px); /* Establece el ancho igual al 100% menos el espacio de relleno */
+            margin-left: auto; /* Centra horizontalmente el botón */
+            margin-right: auto; /* Centra horizontalmente el botón */
+        }
+
+            .btn-primary:hover {
+                background-color: #f6b59d; /* Cambia el color de fondo del botón al pasar el mouse sobre él */
+            }
+    </style>
+</head>
+<body>
+    <div class="background"></div> <!-- Div para la imagen de fondo -->
+
+    <div class="card">
+        <h2 class="mb-4">Registrarse</h2>
+        <form asp-controller="Login" asp-action="Registrarse" method="post">
+
+            <div class="form-group">
+                <input type="email" required id="correo" name="correo" class="form-control" placeholder="Correo" />
+            </div>
+
+            <div class="form-group">
+                <input type="password" required id="clave" name="clave" class="form-control" placeholder="Contraseña" />
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit">Registrarse</button>
+
+            @if (ViewData["Mensaje"] != null)
+            {
+                <div class="alert alert-danger mt-3" role="alert">
+                    @ViewData["Mensaje"]
+                </div>
+            }
+
+            <div class="mt-3">
+                ¿Tienes una cuenta? <br /> <a href="@Url.Action("IniciarSesion","Login")">Iniciar Sesión</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
